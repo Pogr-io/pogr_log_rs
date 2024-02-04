@@ -157,10 +157,6 @@ The SDK performs logging operations asynchronously, ensuring minimal impact on y
 
 While the SDK prioritizes a fire-and-forget approach for simplicity, it's designed to gracefully handle transmission errors. You can extend the SDK to implement custom error handling or retry mechanisms based on your needs.
 
-### Conclusion
-
-The POGR Log SDK offers a flexible and powerful logging solution for Rust applications, with extensive configuration options to meet the needs of any project. By leveraging these configurations, you can ensure that your logging strategy is optimized for both development and production environments, providing clear insights into your application's behavior and performance.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
