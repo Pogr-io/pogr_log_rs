@@ -30,21 +30,34 @@ pogr_log_sdk = "0.1.0"
 To use the SDK, you need to configure the logger with your POGR credentials and desired log level:
 
 ```rust
-use pogr_log_sdk::{init_logger, LogConfig, LevelFilter};
+use pogr_log_sdk::{init_logger, LogConfig, LoggerConfig, LevelFilter};
+use std::env;
 
 fn main() {
-    let config = LogConfig::AccessKeys {
-        access_key: "your_access_key".to_string(),
-        secret_key: "your_secret_key".to_string(),
-        logger_config: LoggerConfig {
-            service: "your_service_name".to_string(),
-            environment: "your_environment".to_string(),
-            default_type: Some("default_log_type".to_string()),
-        },
+    // Define your logger configuration
+    let logger_config = LoggerConfig {
+        service: "your_service_name".to_string(),
+        environment: "your_environment".to_string(),
+        default_type: Some("default_log_type".to_string()),
     };
 
-    init_logger(config, LevelFilter::Info);
+    // Define your authentication configuration
+    let auth_config = LogConfig::AccessKeys {
+        access_key: "your_access_key".to_string(),
+        secret_key: "your_secret_key".to_string(),
+        logger_config: logger_config.clone(), // Assuming LoggerConfig derives Clone
+    };
+
+    // Optionally, define your API URL via environment variable or directly
+    let api_url = env::var("POGR_INTAKE_URL").ok(); // Attempts to read from env, else None
+
+    // Define the log level filter
+    let filter = LevelFilter::Info;
+
+    // Initialize the logger with the specified configuration
+    init_logger(auth_config, api_url, logger_config, filter);
 }
+
 ```
 
 ## Usage
@@ -132,7 +145,7 @@ Control the verbosity of your logs with log level filtering. The SDK supports th
 use log::LevelFilter;
 use pogr_log_sdk::init_logger;
 
-init_logger(config, LevelFilter::Info); // Only logs of Info level or higher will be processed.
+init_logger(auth_config, api_url, logger_config, LevelFilter::Info); // Only logs of Info level or higher will be processed.
 ```
 
 ### Environmental Variables
